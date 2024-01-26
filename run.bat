@@ -1,0 +1,1 @@
+cd /d C:\Users\User\Desktop\PROJECTS\Twitter-API-Python & call  C:\Users\User\Desktop\PROJECTS\Twitter-API-Python\.venv\Scripts\activate & python C:\Users\User\Desktop\PROJECTS\Twitter-API-Python\app.py
