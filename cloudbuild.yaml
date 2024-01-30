@@ -15,9 +15,8 @@ images:
   - 'gcr.io/$cicd-project-412702/service2'
 
 options:
-  build:
-    service_account: cicd-trigger-github@cicd-project-412702.iam.gserviceaccount.com
+  substitution_option: 'ALLOW_LOOSE'
+  dynamic_substitutions: true
 
 logging:
   - gcsBucket: "gs://cb-logs-cicd-project-412702"
-
