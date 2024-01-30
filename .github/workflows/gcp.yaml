@@ -26,5 +26,5 @@ jobs:
       run: |
           gcloud auth configure-docker asia-southeast1-docker.pkg.dev
           docker build -t asia-southeast1-docker.pkg.dev/cicd-project-412702/demo -f script/Dockerfile . 
-          docker push asia-southeast1-docker.pkg.dev/cicd-project-412702/demo
+          docker push asia-southeast1-docker.pkg.dev/cicd-project-412702/demo/python-script
           
