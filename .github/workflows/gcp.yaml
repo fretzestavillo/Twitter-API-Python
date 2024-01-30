@@ -8,7 +8,7 @@ on:
 env:
   PROJECT_ID: cicd-project-412702
   REGION: asia-southeast1
-  GAR_LOCATION: asia-southeast1-docker.pkg.dev/cicd-project-412702/demo/
+  GAR_LOCATION: asia-southeast1-docker.pkg.dev/cicd-project-412702/demo
 
 jobs:
   build-mysql:
