@@ -11,11 +11,23 @@ steps:
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'gcloud'
     timeout: 240s
+    args: 
+      - 'run'
+      - 'deploy'
+      - 'demo-service'
+      - '--image'
+      - 'gcr.io/cicd-project-412702/container-name/version-1'
+      - '--region'
+      - 'asia-southeast1'
+      - '--platform'
+      - 'managed'
+      - '--memory'
+      - '8Gi'
+      - '--cpu'
+      - '8'
+      - '--timeout'
+      - '300'
 
-    
-    args: ['run','deploy','demo-service','--image','gcr.io/cicd-project-412702/'container-name'/'version-1','--region','asia-southeast1','--platform','managed','--memory','8Gi','--cpu','8','--timeout','300']
-
-   
 options:
   logging:
     - 'gcsBucket: cicd-project-412702-logs'
