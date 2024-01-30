@@ -7,11 +7,11 @@ steps:
   - name: 'docker/compose:1.29.2'
     args: ['--file', 'docker-compose.yaml', 'push']
 
-  # Entrypoint, timeout and environment variables
+  # Entrypoint, timeout, and environment variables
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'gcloud'
     timeout: 240s
-    args: 
+    args:
       - 'run'
       - 'deploy'
       - 'demo-service'
@@ -29,5 +29,4 @@ steps:
       - '300'
 
 options:
-  logging:
-    - 'gcsBucket: cicd-project-412702-logs'
+  logging: 'gcsBucket=cicd-project-412702-logs'
