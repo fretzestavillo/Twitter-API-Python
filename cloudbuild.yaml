@@ -4,11 +4,11 @@ steps:
   - name: 'docker/compose:1.29.2'
     args:
       - '-f'
-      - 'docker-compose.yaml'
+      - 'docker-compose.yml'
       - 'build'
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['compose', '-f', 'docker-compose.yaml', 'push']
+    args: ['compose', '-f', 'docker-compose.yml', 'push']
 
 images:
   - 'gcr.io/$cicd-project-412702/service1'
