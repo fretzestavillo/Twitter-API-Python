@@ -1,19 +1,58 @@
 version: '3'
-
 services:
-    mysql: 
-      build: ./db/
-      restart: always
-      environment: 
-        MYSQL_DATABASE: 'twitter'
-        MYSQL_ROOT_PASSWORD: 'root'
-      ports:
-        - '3306:3306'
+  app1:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    
 
-    script:
-      build: ./script/
-      # command:  ["python3", "/app/app.py"]
-      # depends_on:
-      #   - mysql
+  app2:
+    build:
+      context: ./script
+      dockerfile: Dockerfile
+    
 
         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# version: '3'
+
+# services:
+#     mysql: 
+#       build: ./db/
+#       restart: always
+#       environment: 
+#         MYSQL_DATABASE: 'twitter'
+#         MYSQL_ROOT_PASSWORD: 'root'
+#       ports:
+#         - '3306:3306'
+
+#     script:
+#       build: ./script/
+#       # command:  ["python3", "/app/app.py"]
+#       # depends_on:
+#       #   - mysql
