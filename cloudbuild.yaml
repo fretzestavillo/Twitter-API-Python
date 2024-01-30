@@ -29,4 +29,5 @@ steps:
       - '300'
 
 options:
-  logging: 'gcsBucket=cicd-project-412702-logs'
+  logging:
+    gcsBucket: 'cicd-project-412702-logs'
