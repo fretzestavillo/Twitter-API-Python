@@ -20,4 +20,5 @@ images:
   - asia-southeast1-docker.pkg.dev/cicd-project-412702/python-repo/my-app:${SHORT_SHA}
 
 options:
-  logging: 'NONE'
+  logging: CLOUD_LOGGING_ONLY
+
