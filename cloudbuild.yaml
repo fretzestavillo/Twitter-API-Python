@@ -4,7 +4,7 @@ steps:
     args: [
       "build",
       "-t",
-      "asia-southeast1-docker.pkg.dev/cicd-project-412702/python-repo/my-app:${SHORT_SHA}",
+      "asia-southeast2-docker.pkg.dev/cicd-project-412702/python-app/my-app:${SHORT_SHA}",
       ".",
     ]
 
@@ -12,12 +12,12 @@ steps:
   - name: "gcr.io/cloud-builders/docker"
     args: [
       "push",
-      "asia-southeast1-docker.pkg.dev/cicd-project-412702/python-repo/my-app:${SHORT_SHA}",
+      "asia-southeast2-docker.pkg.dev/cicd-project-412702/python-app/my-app:${SHORT_SHA}",
       ".",
     ]
 
 images:
-  - asia-southeast1-docker.pkg.dev/cicd-project-412702/python-repo/my-app:${SHORT_SHA}
+  - asia-southeast2-docker.pkg.dev/cicd-project-412702/python-app/my-app:${SHORT_SHA}
 
 options:
   logging: CLOUD_LOGGING_ONLY
