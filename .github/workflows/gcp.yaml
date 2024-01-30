@@ -25,5 +25,6 @@ jobs:
     - name: Build and push the Docker image to Artifact Registry
       run: |
           gcloud auth configure-docker asia-southeast1-docker.pkg.dev
-          docker-compose up 
+          docker build -t asia-southeast1-docker.pkg.dev/cicd-project-412702/demo -f script/Dockerfile . 
           docker push asia-southeast1-docker.pkg.dev/cicd-project-412702/demo
+          
