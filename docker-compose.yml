@@ -1,7 +1,52 @@
 version: '3'
 
 services:
-  mysql: 
-    build: ./db/
+  mysql:
+    image: asia-southeast1-docker.pkg.dev/cicd-project-412702/demo/mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'twitter'
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - '3306:3306'
+
   script:
-    build: ./script/
+    image: asia-southeast1-docker.pkg.dev/cicd-project-412702/demo/python-script:latest
+    depends_on:
+      - mysql
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# version: '3'
+
+# services:
+#   mysql: 
+#     build: ./db/
+#   script:
+#     build: ./script/
+#     depends_on:
+#       - mysql
