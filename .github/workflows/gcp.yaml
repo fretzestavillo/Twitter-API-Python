@@ -35,5 +35,9 @@ jobs:
         run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
       
       - name: Build and push images
-        run: docker-compose -f docker-compose.yml up --build
+        run: |
+          docker-compose -f docker-compose.yml up --build
+          docker-compose -f docker-compose.yml push
         working-directory: ${{ env.WORKING_DIRECTORY }}
+        
+ 
