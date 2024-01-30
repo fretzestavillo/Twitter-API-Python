@@ -30,4 +30,4 @@ steps:
 
 options:
   logging:
-    gcsBucket: 'cicd-project-412702-logs'
+    - 'gcsBucket=cicd-project-412702-logs'
