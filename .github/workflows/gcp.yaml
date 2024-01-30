@@ -5,7 +5,7 @@ on:
     branches: 'main'
 
 env:
-  GOOGLE_ZONE: ${{ secrets.GOOGLE_ZONE }}
+  # GOOGLE_ZONE: secrets.GOOGLE_ZONE 
   GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
   GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
 
@@ -22,8 +22,8 @@ jobs:
         service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
         export_default_credentials: true
 
-    - name: Build Docker Image
-      run: | 
-        gcloud auth configure-docker asia-southeast2-docker.pkg.dev
-        docker-compose up
-        docker push asia-southeast2-docker.pkg.dev/cicd-project-412702/python-app
+    - name: Build and push the Docker image to Artifact Registry
+      run: |
+          gcloud auth configure-docker asia-southeast2-docker.pkg.dev
+          docker-compose up asia-southeast2-docker.pkg.dev/cicd-project-412702/python-app .
+          docker push asia-southeast2-docker.pkg.dev/cicd-project-412702/python-app
