@@ -1,22 +1,23 @@
-# cloudbuild.yaml
-
 steps:
+  # Docker Compose Build
   - name: 'docker/compose:1.29.2'
-    args:
-      - '-f'
-      - 'docker-compose.yml'
-      - 'build'
+    args: ['--file', 'docker-compose.yml', 'build']
 
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['compose', '-f', 'docker-compose.yml', 'push']
+  # Docker Compose Push
+  - name: 'docker/compose:1.29.2'
+    args: ['--file', 'docker-compose.yml', 'push']
 
-images:
-  - 'gcr.io/$cicd-project-412702/service1'
-  - 'gcr.io/$cicd-project-412702/service2'
-
-options:
-  substitution_option: 'ALLOW_LOOSE'
-  dynamic_substitutions: true
-
-logging:
-  - gcsBucket: "gs://cb-logs-cicd-project-412702"
+  # Entrypoint, timeout and environment variables
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    timeout: 240s
+    args: 
+      - 'compute'
+      - 'instances'
+      - 'create-with-container'
+      - 'my-vm-name'
+      - '--container-image'
+      - 'asia-southeast1.pkg.dev/${cicd-project-412702}/my-docker-repo/myimage'
+    env:
+      - 'CLOUDSDK_COMPUTE_REGION=asia-southeast1'
+      - 'CLOUDSDK_COMPUTE_ZONE=asia-southeast1-b'
