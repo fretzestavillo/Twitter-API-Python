@@ -3,7 +3,7 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-COPY  script/app.py script/requirements.txt ./
+COPY  app.py requirements.txt ./
 
 
 RUN pip install --no-cache-dir -r requirements.txt
