@@ -23,4 +23,5 @@ options:
     service_account: cicd-trigger-github@cicd-project-412702.iam.gserviceaccount.com
 
   # Use the REGIONAL_USER_OWNED_BUCKET option to create a regional bucket
-  default_logs_bucket_behavior: REGIONAL_USER_OWNED_BUCKET
+  default_logs_bucket_behavior: cb-logs-cicd-project-412702
+
