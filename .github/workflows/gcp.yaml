@@ -68,8 +68,8 @@ jobs:
     - name: Build
       run: |
 
-          gcloud auth configure-docker asia-southeast1-docker.pkg.dev
-          docker-compose up /../../docker-compose.yml
+        gcloud auth configure-docker asia-southeast1-docker.pkg.dev
+        docker-compose up --build
     # Push the Docker image to Google Artifact Registry
     - name: Publish
       run: |
