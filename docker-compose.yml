@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+    mysql: 
+      build: ./db/
+      restart: always
+      environment: 
+        MYSQL_DATABASE: 'twitter'
+        MYSQL_ROOT_PASSWORD: 'root'
+      ports:
+        - '3306:3306'
+
+    script:
+      build: ./script/
+      command:  ["python3", "/app/app.py"]
+      depends_on:
+        - mysql
