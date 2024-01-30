@@ -16,3 +16,11 @@ steps:
 images:
   - 'gcr.io/$cicd-project-412702/service1'
   - 'gcr.io/$cicd-project-412702/service2'
+
+options:
+  # Specify the service account to use for the build
+  build:
+    service_account: cicd-trigger-github@cicd-project-412702.iam.gserviceaccount.com
+
+  # Use the REGIONAL_USER_OWNED_BUCKET option to create a regional bucket
+  default_logs_bucket_behavior: REGIONAL_USER_OWNED_BUCKET
