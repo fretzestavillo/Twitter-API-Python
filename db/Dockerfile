@@ -2,7 +2,7 @@
 FROM mysql:latest
 
 # Copy a custom SQL script to set the root password
-COPY ./init.sql /docker-entrypoint-initdb.d/
+# COPY ./init.sql /docker-entrypoint-initdb.d/
 
 
 
