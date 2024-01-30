@@ -1,16 +1,7 @@
 version: '3'
 
 services:
-    mysql: 
-      build: ./db/
-      restart: always
-      environment: 
-        MYSQL_DATABASE: 'twitter'
-        MYSQL_ROOT_PASSWORD: 'root'
-      ports:
-        - '3306:3306'
-
-    script:
-      build: ./script/
-      depends_on:
-      - mysql
+  mysql: 
+    build: ./db/
+  script:
+    build: ./script/
