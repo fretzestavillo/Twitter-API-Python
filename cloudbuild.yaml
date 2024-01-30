@@ -18,6 +18,6 @@ steps:
       - 'my-vm-name'
       - '--container-image'
       - 'asia-southeast1.pkg.dev/${cicd-project-412702}/my-docker-repo/myimage'
-    env:
-      - 'CLOUDSDK_COMPUTE_REGION=asia-southeast1'
-      - 'CLOUDSDK_COMPUTE_ZONE=asia-southeast1-b'
+options:
+  logging:
+    - 'gcsBucket: cicd-project-412702-logs'
