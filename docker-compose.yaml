@@ -15,3 +15,5 @@ services:
       command:  ["python3", "/app/app.py"]
       depends_on:
         - mysql
+
+        
