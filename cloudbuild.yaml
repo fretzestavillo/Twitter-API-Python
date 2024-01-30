@@ -1,33 +1,22 @@
 steps:
-  # Docker Compose Build
-  - name: 'docker/compose:1.29.2'
-    args: ['--file', 'docker-compose.yaml', 'build']
-
-  # Docker Compose Push
-  - name: 'docker/compose:1.29.2'
-    args: ['--file', 'docker-compose.yaml', 'push']
-
-  # Entrypoint, timeout, and environment variables
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: 'gcloud'
-    timeout: 240s
+  # Build Services
+  - name: "gcr.io/cloud-builders/docker"
     args:
-      - 'run'
-      - 'deploy'
-      - 'demo-service'
-      - '--image'
-      - 'gcr.io/cicd-project-412702/container-name/version-1'
-      - '--region'
-      - 'asia-southeast1'
-      - '--platform'
-      - 'managed'
-      - '--memory'
-      - '8Gi'
-      - '--cpu'
-      - '8'
-      - '--timeout'
-      - '300'
+      [
+        "build",
+        "-t",
+        "asia-southeast1-docker.pkg.dev/cicd-project-412702/python-repo/my-app:${SHORT_SHA}",
+        ".",
+      ]
 
-options:
-  logging:
-    - 'gcsBucket=cicd-project-412702-logs'
+  # Push images to Google Artifact Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "asia-southeast1-docker.pkg.dev/cicd-project-412702/python-repo/my-app:${SHORT_SHA}",
+        ".",
+      ]
+
+  images:
+    - asia-southeast1-docker.pkg.dev/cicd-project-412702/python-repo/my-app:${SHORT_SHA}
