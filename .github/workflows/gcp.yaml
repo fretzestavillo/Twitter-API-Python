@@ -10,32 +10,30 @@ env:
   PROJECT_ID: cicd-project-412702
   REGION: asia-southeast1
   GAR_LOCATION: asia-southeast1-docker.pkg.dev/cicd-project-412702/demo/
+  WORKING_DIRECTORY: "${{ github.workspace }}"
 
-job:
+jobs:
   build-push-artifact:
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v3"
-
-      - id: "auth"
-          uses: "google-github-actions/auth@v1"
-          with:
-            credentials_json: "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}"
-
-      - name: "Set up Cloud SDK"
-        uses: "google-github-actions/setup-gcloud@v1"
-
-      - name: "Use gcloud CLI"
-        run: "gcloud info"
-
-      - name: "Docker auth"
-        run: |-
-          gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
-
-      - name: Build image
-        run: docker build . --file DOCKERFILE_LOCATION --tag ${{ env.GAR_LOCATION }}
-        working-directory: WORKING_DIRECTORY
-
-      - name: Push image
-        run: docker push ${{ env.GAR_LOCATION }}
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Authenticate with Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}"
+      
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+      
+      - name: Use gcloud CLI
+        run: gcloud info
+      
+      - name: Docker auth
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+      
+      - name: Build and push images
+        run: docker-compose -f docker-compose.yml up --build
+        working-directory: ${{ env.WORKING_DIRECTORY }}
