@@ -13,7 +13,7 @@ services:
     script:
       build: ./script/
       # command:  ["python3", "/app/app.py"]
-      depends_on:
-        - mysql
+      # depends_on:
+      #   - mysql
 
         
