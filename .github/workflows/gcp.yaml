@@ -4,6 +4,13 @@ on:
   push:
     branches: 'main'
 
+env:
+  GOOGLE_ZONE: ${{ secrets.GOOGLE_ZONE }}
+  GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+  GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+  
+
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -11,18 +18,19 @@ jobs:
     - name: code checkout
       uses: actions/checkout@v2
 
-    - name: install the gcloud cli
+    - name: Install the gcloud CLI
       uses: google-github-actions/setup-gcloud@v0
       with:
-          project_id: ${{ secrets.GOOGLE_PROJECT }}
-          service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-          export_default_credentials: true
+        service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        export_default_credentials: true
+
+
+
+
+
 
     - name: Build Docker Image
-      env:
-          GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
       run: | 
-          gcloud auth configure-docker asia-southeast2-docker.pkg.dev
-          docker-compose up
-          docker push asia-southeast2-docker.pkg.dev/cicd-project-412702/python-app
-
+        gcloud auth configure-docker asia-southeast2-docker.pkg.dev
+        docker-compose up
+        docker push asia-southeast2-docker.pkg.dev/cicd-project-412702/python-app
