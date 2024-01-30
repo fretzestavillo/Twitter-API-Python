@@ -16,10 +16,6 @@ jobs:
       - name: Code Checkout
         uses: actions/checkout@v2
 
-      - name: Set Google Cloud SDK default region
-        run: |
-          gcloud config set compute/zone $GOOGLE_ZONE
-
       - name: Install the gcloud CLI
         uses: google-github-actions/setup-gcloud@v0
         with:
@@ -30,5 +26,5 @@ jobs:
         run: |
           set -e
           gcloud auth configure-docker asia-southeast1-docker.pkg.dev
-          docker build -t $GOOGLE_ZONE/-docker.pkg.dev/$GOOGLE_PROJECT/demo:latest -f script/Dockerfile .
-          docker push $GOOGLE_ZONE/-docker.pkg.dev/$GOOGLE_PROJECT/demo:latest
+          docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/demo:latest -f script/Dockerfile .
+          docker push asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/demo:latest
