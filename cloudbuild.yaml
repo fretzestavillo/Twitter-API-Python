@@ -1,11 +1,11 @@
 steps:
   # Docker Compose Build
   - name: 'docker/compose:1.29.2'
-    args: ['--file', 'docker-compose.yml', 'build']
+    args: ['--file', 'docker-compose.yaml', 'build']
 
   # Docker Compose Push
   - name: 'docker/compose:1.29.2'
-    args: ['--file', 'docker-compose.yml', 'push']
+    args: ['--file', 'docker-compose.yaml', 'push']
 
   # Entrypoint, timeout and environment variables
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
