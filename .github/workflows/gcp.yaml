@@ -70,10 +70,7 @@ jobs:
         set -e
           cd Twitter-API-Python/
           gcloud auth configure-docker asia-southeast1-docker.pkg.dev
-          docker-compose up -d
-          docker-compose ps  # for debugging, check if the services are running
-          docker-compose down  # optional, depends on your use case
-          docker-compose build  # if needed
+          docker-compose build ./
     # Push the Docker image to Google Artifact Registry
     - name: Publish
       run: |
