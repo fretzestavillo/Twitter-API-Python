@@ -67,8 +67,7 @@ jobs:
     # Build the Docker image
     - name: Build
       run: |
-        set -e
-          cd Twitter-API-Python/
+      
           gcloud auth configure-docker asia-southeast1-docker.pkg.dev
           docker-compose build ./
     # Push the Docker image to Google Artifact Registry
