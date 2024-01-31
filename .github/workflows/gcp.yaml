@@ -5,6 +5,12 @@ on:
     branches:
       - main
 
+env:
+  PROJECT_ID: cicd-project-412702
+  REGION: asia-southeast1
+  GAR_LOCATION: asia-southeast1-docker.pkg.dev/cicd-project-412702/demo
+  IMAGE_TAG: latest
+
 jobs:
   build-mysql:
     runs-on: ubuntu-latest
@@ -24,14 +30,16 @@ jobs:
         run: gcloud info
 
       - name: Docker auth
-        run: gcloud auth configure-docker ${{ secrets.GAR_REGION }}.docker.pkg.dev --quiet
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
 
       - name: Build MySQL image
-        run: docker build ./db/ --file ./db/Dockerfile --tag ${{ secrets.GAR_DIRECTORY }}/mysql:latest
+        run: docker build ./db/ --file ./db/Dockerfile --tag ${{ env.GAR_LOCATION }}/mysql:latest
         working-directory: .
 
       - name: Push MySQL image to Artifact Registry
-        run: docker push ${{ secrets.GAR_DIRECTORY }}/mysql:latest
+        run: docker push ${{ env.GAR_LOCATION }}/mysql:latest
+
+    
 
   build-and-push-python:
     runs-on: ubuntu-latest
@@ -52,10 +60,10 @@ jobs:
         run: gcloud info
 
       - name: Docker auth
-        run: gcloud auth configure-docker ${{ secrets.GAR_REGION }}.docker.pkg.dev --quiet
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
 
       - name: Build and push Python image
         run: |
-          docker build ./script/ --file ./script/Dockerfile --tag ${{ secrets.GAR_DIRECTORY }}/python-script:latest
-          docker push ${{ secrets.GAR_DIRECTORY }}/python-script:latest
+          docker build ./script/ --file ./script/Dockerfile --tag ${{ env.GAR_LOCATION }}/python-script:latest
+          docker push ${{ env.GAR_LOCATION }}/python-script:latest
         working-directory: .
