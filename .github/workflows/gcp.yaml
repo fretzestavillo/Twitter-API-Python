@@ -45,13 +45,11 @@ jobs:
           echo "::set-output name=has_images::$(docker images | grep ${GAR_LOCATION} | wc -l)"
 
       - name: Build and push MySQL image
-        if: steps.check-images.outputs.has_images == 0
         run: |
           docker build ./db/ --file ./db/Dockerfile --tag ${{ env.GAR_LOCATION }}/mysql:${{ env.IMAGE_TAG }}
           docker push ${{ env.GAR_LOCATION }}/mysql:${{ env.IMAGE_TAG }}
 
       - name: Build and push Python image
-        if: steps.check-images.outputs.has_images == 0
         run: |
           docker build ./script/ --file ./script/Dockerfile --tag ${{ env.GAR_LOCATION }}/python-script:${{ env.IMAGE_TAG }}
           docker push ${{ env.GAR_LOCATION }}/python-script:${{ env.IMAGE_TAG }}
