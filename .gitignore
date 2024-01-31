@@ -1,6 +1,3 @@
-./sheduler
-logfile.log
+sheduler
+script/venv
 key.json
-sampol.yaml
-original.yaml
-script.sh
