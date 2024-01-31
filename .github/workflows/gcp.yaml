@@ -116,4 +116,9 @@ jobs:
           gcloud compute scp ./docker-compose.yml instance1:/path/on/instance/docker-compose.yml
 
           # SSH into the instance and run docker-compose
-          gcloud compute ssh instance1
+          gcloud compute ssh instance1 --command="cd /path/on/instance && docker-compose up -d"
+        env:
+          PROJECT_ID: "${{ env.PROJECT_ID }}"
+          REGION: "${{ env.GCE_REGION }}"
+          GAR_LOCATION: "${{ env.GAR_LOCATION }}"
+          GOOGLE_APPLICATION_CREDENTIALS: "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}"
