@@ -27,11 +27,11 @@ jobs:
         run: gcloud auth configure-docker ${{ secrets.GAR_REGION }}.docker.pkg.dev --quiet
 
       - name: Build MySQL image
-        run: docker build ./db/ --file ./db/Dockerfile --tag ${{ secrets.GAR_DIRECTORY }}/mysql:${{ secrets.IMAGE_TAG }}
+        run: docker build ./db/ --file ./db/Dockerfile --tag ${{ secrets.GAR_DIRECTORY }}/mysql:latest
         working-directory: .
 
       - name: Push MySQL image to Artifact Registry
-        run: docker push ${{ secrets.GAR_DIRECTORY }}/mysql:${{ secrets.IMAGE_TAG }}
+        run: docker push ${{ secrets.GAR_DIRECTORY }}/mysql:latest
 
   build-and-push-python:
     runs-on: ubuntu-latest
@@ -56,6 +56,6 @@ jobs:
 
       - name: Build and push Python image
         run: |
-          docker build ./script/ --file ./script/Dockerfile --tag ${{ secrets.GAR_DIRECTORY }}/python-script:${{ secrets.IMAGE_TAG }}
-          docker push ${{ secrets.GAR_DIRECTORY }}/python-script:${{ secrets.IMAGE_TAG }}
+          docker build ./script/ --file ./script/Dockerfile --tag ${{ secrets.GAR_DIRECTORY }}/python-script:latest
+          docker push ${{ secrets.GAR_DIRECTORY }}/python-script:latest
         working-directory: .
