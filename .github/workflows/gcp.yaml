@@ -11,7 +11,6 @@ env:
   GAR_LOCATION: asia-southeast1-docker.pkg.dev/cicd-project-412702/demo
   SERVICE_NAME: my-cloud-run-service
   IMAGE_TAG: latest
-  GCE_REGION: asia-southeast1-a
 
 jobs:
   build-mysql:
@@ -32,14 +31,14 @@ jobs:
         run: gcloud info
 
       - name: Docker auth
-        run: gcloud auth configure-docker "${{ env.REGION }}-docker.pkg.dev" --quiet
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
 
       - name: Build MySQL image
-        run: docker build ./db/ --file ./db/Dockerfile --tag "${{ env.GAR_LOCATION }}/mysql:${{ env.IMAGE_TAG }}"
+        run: docker build ./db/ --file ./db/Dockerfile --tag ${{ env.GAR_LOCATION }}/mysql:latest
         working-directory: .
 
       - name: Push MySQL image to Artifact Registry
-        run: docker push "${{ env.GAR_LOCATION }}/mysql:${{ env.IMAGE_TAG }}"
+        run: docker push ${{ env.GAR_LOCATION }}/mysql:latest
 
   build-and-push-python:
     runs-on: ubuntu-latest
@@ -60,12 +59,12 @@ jobs:
         run: gcloud info
 
       - name: Docker auth
-        run: gcloud auth configure-docker "${{ env.REGION }}-docker.pkg.dev" --quiet
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
 
       - name: Build and push Python image
         run: |
-          docker build ./script/ --file ./script/Dockerfile --tag "${{ env.GAR_LOCATION }}/python-script:${{ env.IMAGE_TAG }}"
-          docker push "${{ env.GAR_LOCATION }}/python-script:${{ env.IMAGE_TAG }}"
+          docker build ./script/ --file ./script/Dockerfile --tag ${{ env.GAR_LOCATION }}/python-script:latest
+          docker push ${{ env.GAR_LOCATION }}/python-script:latest
         working-directory: .
 
   deploy-to-compute-engine:
@@ -90,30 +89,30 @@ jobs:
 
           # Set project and region
           gcloud config set project "${{ env.PROJECT_ID }}"
-          gcloud config set compute/region "${{ env.GCE_REGION }}"
+          gcloud config set compute/region "${{ env.REGION }}"
 
           # Pull the latest MySQL Docker image from Artifact Registry
-          docker pull "${{ env.GAR_LOCATION }}/mysql:${{ env.IMAGE_TAG }}"
+          docker pull "${{ env.GAR_LOCATION }}/mysql:latest"
 
           # Pull the latest Python Docker image from Artifact Registry
-          docker pull "${{ env.GAR_LOCATION }}/python-script:${{ env.IMAGE_TAG }}"
+          docker pull "${{ env.GAR_LOCATION }}/python-script:latest"
 
           # Stop and remove the existing MySQL container (if running)
           docker stop my-mysql-container || true
           docker rm my-mysql-container || true
 
           # Run the new MySQL Docker container
-          docker run -d --name my-mysql-container "${{ env.GAR_LOCATION }}/mysql:${{ env.IMAGE_TAG }}"
+          docker run -d --name my-mysql-container "${{ env.GAR_LOCATION }}/mysql:latest"
 
           # Stop and remove the existing Python container (if running)
           docker stop my-python-container || true
           docker rm my-python-container || true
 
           # Run the new Python Docker container
-          docker run -d --name my-python-container -p 80:80 "${{ env.GAR_LOCATION }}/python-script:${{ env.IMAGE_TAG }}"
+          docker run -d --name my-python-container -p 80:80 "${{ env.GAR_LOCATION }}/python-script:latest"
 
-          # Copy the docker-compose.yml file to the Compute Engine instance
-          gcloud compute scp ./docker-compose.yml instance1:/path/on/instance/docker-compose.yml
+          # Optionally: Copy the docker-compose.yml file to the Compute Engine instance
+          # gcloud compute scp ./docker-compose.yml instance1:/path/on/instance/docker-compose.yml
 
-          # SSH into the instance and run docker-compose
-          gcloud compute ssh instance1 --command "cd /path/on/instance && docker-compose up -d"
+          # Optionally: SSH into the instance and run docker-compose
+          # gcloud compute ssh instance1
