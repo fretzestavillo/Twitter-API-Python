@@ -116,4 +116,4 @@ jobs:
           gcloud compute scp ./docker-compose.yml instance1:/path/on/instance/docker-compose.yml
 
           # SSH into the instance and run docker-compose
-          gcloud compute ssh instance1
+          gcloud compute ssh instance1 --command "cd /path/on/instance && docker-compose up -d"
