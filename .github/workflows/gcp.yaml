@@ -74,7 +74,13 @@ jobs:
     steps:
       - name: Deploy to Compute Engine
         run: |
-          # Install gcloud CLI
+          # Add the Google Cloud SDK repository
+          sudo apt-get update
+          sudo apt-get install -y apt-transport-https ca-certificates gnupg
+          curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+          echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+
+          # Install Google Cloud SDK
           sudo apt-get update
           sudo apt-get install -y google-cloud-sdk
 
@@ -100,3 +106,4 @@ jobs:
           REGION: ${{ env.GCE_REGION }}
           GAR_LOCATION: ${{ env.GAR_LOCATION }}
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+      
