@@ -8,7 +8,7 @@ on:
 env:
   PROJECT_ID: cicd-project-412702
   GAR_LOCATION: asia-southeast1-docker.pkg.dev/cicd-project-412702/demo
-  GCE_INSTANCE_NAME: instance1	  # Replace with your actual instance name
+  GCE_INSTANCE_NAME: instance1   # Replace with your actual instance name
   GCE_INSTANCE_ZONE: asia-southeast1-a   # Replace with your actual instance zone
   IMAGE_TAG: latest
 
@@ -59,8 +59,12 @@ jobs:
       - name: Replace and restart containers on GCE instance
         run: |
           gcloud compute ssh ${{ env.GCE_INSTANCE_NAME }} \
-          --command="docker pull ${GAR_LOCATION}/mysql:${IMAGE_TAG} && docker stop mysql-container && docker rm mysql-container && docker run -d --network=my_network -p 3306:3306 --name=mysql-container ${GAR_LOCATION}/mysql:${IMAGE_TAG}"
-          --zone=${{ env.GCE_INSTANCE_ZONE }} \
-          --zone=${{ env.GCE_INSTANCE_ZONE }} \
-          gcloud compute ssh ${{ env.GCE_INSTANCE_NAME }} \
-          --command="docker pull ${GAR_LOCATION}/python-script:${IMAGE_TAG} && docker stop python-script-container && docker rm python-script-container && docker run -d --network=my_network --name=python-script-container ${GAR_LOCATION}/python-script:${IMAGE_TAG}"
+            --zone=${{ env.GCE_INSTANCE_ZONE }} \
+            --command="docker pull ${GAR_LOCATION}/mysql:${IMAGE_TAG} && \
+                        docker stop mysql-container && \
+                        docker rm mysql-container && \
+                        docker run -d --network=my_network -p 3306:3306 --name=mysql-container ${GAR_LOCATION}/mysql:${IMAGE_TAG} && \
+                        docker pull ${GAR_LOCATION}/python-script:${IMAGE_TAG} && \
+                        docker stop python-script-container && \
+                        docker rm python-script-container && \
+                        docker run -d --network=my_network --name=python-script-container ${GAR_LOCATION}/python-script:${IMAGE_TAG}"
