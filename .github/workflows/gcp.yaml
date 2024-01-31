@@ -30,20 +30,6 @@ jobs:
       - name: Use gcloud CLI
         run: gcloud info
 
-      - name: Install Docker on GCE instance
-        run: |
-          gcloud compute ssh ${{ env.GCE_INSTANCE_NAME }} \
-            --zone=${{ env.GCE_INSTANCE_ZONE }} \
-            --command="sudo apt-get update && sudo apt-get install -y docker.io"
-
-      - name: Check Docker images on GCE instance
-        id: check-images
-        run: |
-          gcloud compute ssh ${{ env.GCE_INSTANCE_NAME }} \
-            --zone=${{ env.GCE_INSTANCE_ZONE }} \
-            --command="docker images | grep ${GAR_LOCATION}" || true
-          echo "::set-output name=has_images::$(docker images | grep ${GAR_LOCATION} | wc -l)"
-
       - name: Build and push MySQL image
         run: |
           docker build ./db/ --file ./db/Dockerfile --tag ${{ env.GAR_LOCATION }}/mysql:${{ env.IMAGE_TAG }}
@@ -54,15 +40,28 @@ jobs:
           docker build ./script/ --file ./script/Dockerfile --tag ${{ env.GAR_LOCATION }}/python-script:${{ env.IMAGE_TAG }}
           docker push ${{ env.GAR_LOCATION }}/python-script:${{ env.IMAGE_TAG }}
 
+      - name: Install Docker on GCE instance
+          gcloud compute ssh ${{ env.GCE_INSTANCE_NAME }} \
+        run: |
+          --command="sudo apt-get update && sudo apt-get install -y docker.io"
+          --zone=${{ env.GCE_INSTANCE_ZONE }} \
+  
+      - name: Check Docker images on GCE instance
+        id: check-images
+        run: |
+          gcloud compute ssh ${{ env.GCE_INSTANCE_NAME }} \
+          --zone=${{ env.GCE_INSTANCE_ZONE }} \
+          --command="docker images | grep ${GAR_LOCATION}" || true
+          echo "::set-output name=has_images::$(docker images | grep ${GAR_LOCATION} | wc -l)"
       - name: Replace and restart containers on GCE instance
         run: |
           gcloud compute ssh ${{ env.GCE_INSTANCE_NAME }} \
-            --zone=${{ env.GCE_INSTANCE_ZONE }} \
-            --command="docker pull ${env.GAR_LOCATION}/mysql:${env.IMAGE_TAG} && \
-                        docker stop mysql-container && \
-                        docker rm mysql-container && \
-                        docker run -d --network=my_network -p 3306:3306 --name=mysql-container ${env.GAR_LOCATION}/mysql:${env.IMAGE_TAG} && \
-                        docker pull ${GAR_LOCATION}/python-script:${env.IMAGE_TAG} && \
-                        docker stop python-script-container && \
-                        docker rm python-script-container && \
-                        docker run -d --network=my_network --name=python-script-container ${env.GAR_LOCATION}/python-script:${env.IMAGE_TAG}"
+          --zone=${{ env.GCE_INSTANCE_ZONE }} \
+          --command="docker pull ${env.GAR_LOCATION}/mysql:${env.IMAGE_TAG} && \
+          docker stop mysql-container && \
+          docker rm mysql-container && \
+          docker run -d --network=my_network -p 3306:3306 --name=mysql-container ${env.GAR_LOCATION}/mysqlIMAGE_TAG} && \
+          docker pull ${GAR_LOCATION}/python-script:${env.IMAGE_TAG} && \
+          docker stop python-script-container && \
+          docker rm python-script-container && \
+          docker run -d --network=my_network --name=python-script-container ${env.GAR_LOCATION}/python-s{env.IMAGE_TAG}"
