@@ -14,3 +14,5 @@ services:
     image: asia-southeast1-docker.pkg.dev/cicd-project-412702/demo/python-script:latest
     depends_on:
       - mysql
+    ports:
+      - '80:80'

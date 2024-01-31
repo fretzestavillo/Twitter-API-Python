@@ -11,7 +11,7 @@ env:
   GAR_LOCATION: asia-southeast1-docker.pkg.dev/cicd-project-412702/demo
   SERVICE_NAME: my-cloud-run-service
   IMAGE_TAG: latest
-  GCE_REGION: asia-southeast1-a	
+  GCE_REGION: asia-southeast1-a
 
 jobs:
   build-mysql:
@@ -92,18 +92,33 @@ jobs:
           gcloud config set project ${{ env.PROJECT_ID }}
           gcloud config set compute/region ${{ env.GCE_REGION }}
 
-          # Pull the latest Docker image from Artifact Registry
+          # Pull the latest MySQL Docker image from Artifact Registry
+          docker pull "${GAR_LOCATION}/mysql:latest"
+
+          # Pull the latest Python Docker image from Artifact Registry
           docker pull "${GAR_LOCATION}/python-script:latest"
 
-          # Stop and remove the existing container (if running)
-          docker stop my-container || true
-          docker rm my-container || true
+          # Stop and remove the existing MySQL container (if running)
+          docker stop my-mysql-container || true
+          docker rm my-mysql-container || true
 
-          # Run the new Docker container
-          docker run -d --name my-container -p 80:80 "${GAR_LOCATION}/python-script:latest"
+          # Run the new MySQL Docker container
+          docker run -d --name my-mysql-container "${GAR_LOCATION}/mysql:latest"
+
+          # Stop and remove the existing Python container (if running)
+          docker stop my-python-container || true
+          docker rm my-python-container || true
+
+          # Run the new Python Docker container
+          docker run -d --name my-python-container -p 80:80 "${GAR_LOCATION}/python-script:latest"
+
+          # Copy the docker-compose.yml file to the Compute Engine instance
+          gcloud compute scp ./docker-compose.yml instance1:/path/on/instance/docker-compose.yml
+
+          # SSH into the instance and run docker-compose
+          gcloud compute ssh instance1 --command="cd /path/on/instance && docker-compose up -d"
         env:
           PROJECT_ID: ${{ env.PROJECT_ID }}
           REGION: ${{ env.GCE_REGION }}
           GAR_LOCATION: ${{ env.GAR_LOCATION }}
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-      
