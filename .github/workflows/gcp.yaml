@@ -11,6 +11,7 @@ env:
   GAR_LOCATION: asia-southeast1-docker.pkg.dev/cicd-project-412702/demo
   SERVICE_NAME: my-cloud-run-service
   IMAGE_TAG: latest
+  GCE_REGION: asia-southeast1-a	
 
 jobs:
   build-mysql:
@@ -66,3 +67,36 @@ jobs:
           docker build ./script/ --file ./script/Dockerfile --tag ${{ env.GAR_LOCATION }}/python-script:latest
           docker push ${{ env.GAR_LOCATION }}/python-script:latest
         working-directory: .
+
+  deploy-to-compute-engine:
+    runs-on: ubuntu-latest
+    needs: build-and-push-python
+    steps:
+      - name: Deploy to Compute Engine
+        run: |
+          # Install gcloud CLI
+          sudo apt-get update
+          sudo apt-get install -y google-cloud-sdk
+
+          # Authenticate with gcloud using your service account key
+          echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" | base64 --decode > /tmp/key.json
+          gcloud auth activate-service-account --key-file=/tmp/key.json
+
+          # Set project and region
+          gcloud config set project ${{ env.PROJECT_ID }}
+          gcloud config set compute/region ${{ env.GCE_REGION }}
+
+          # Pull the latest Docker image from Artifact Registry
+          docker pull "${GAR_LOCATION}/python-script:latest"
+
+          # Stop and remove the existing container (if running)
+          docker stop my-container || true
+          docker rm my-container || true
+
+          # Run the new Docker container
+          docker run -d --name my-container -p 80:80 "${GAR_LOCATION}/python-script:latest"
+        env:
+          PROJECT_ID: ${{ env.PROJECT_ID }}
+          REGION: ${{ env.GCE_REGION }}
+          GAR_LOCATION: ${{ env.GAR_LOCATION }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
