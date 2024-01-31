@@ -60,11 +60,11 @@ jobs:
         run: |
           gcloud compute ssh ${{ env.GCE_INSTANCE_NAME }} \
             --zone=${{ env.GCE_INSTANCE_ZONE }} \
-            --command="docker pull ${GAR_LOCATION}/mysql:${IMAGE_TAG} && \
+            --command="docker pull ${env.GAR_LOCATION}/mysql:${env.IMAGE_TAG} && \
                         docker stop mysql-container && \
                         docker rm mysql-container && \
-                        docker run -d --network=my_network -p 3306:3306 --name=mysql-container ${GAR_LOCATION}/mysql:${IMAGE_TAG} && \
-                        docker pull ${GAR_LOCATION}/python-script:${IMAGE_TAG} && \
+                        docker run -d --network=my_network -p 3306:3306 --name=mysql-container ${env.GAR_LOCATION}/mysql:${env.IMAGE_TAG} && \
+                        docker pull ${GAR_LOCATION}/python-script:${env.IMAGE_TAG} && \
                         docker stop python-script-container && \
                         docker rm python-script-container && \
-                        docker run -d --network=my_network --name=python-script-container ${GAR_LOCATION}/python-script:${IMAGE_TAG}"
+                        docker run -d --network=my_network --name=python-script-container ${env.GAR_LOCATION}/python-script:${env.IMAGE_TAG}"
